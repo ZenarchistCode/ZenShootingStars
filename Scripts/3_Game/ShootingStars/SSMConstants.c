@@ -12,7 +12,7 @@ class SSMConstants
 
 	static const int TEST_INTERVAL_MS = 1000;
 	static const int MIN_INTERVAL_MS = 120000;
-	static const int MAX_INTERVAL_MS = 300000;
+	static const int MAX_INTERVAL_MS = 600000;
 	static const int NIGHT_RECHECK_MS = 30000;
 
 	// IsNight() must be true AND GetSunOrMoon() must reach this threshold.

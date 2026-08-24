@@ -56,6 +56,9 @@ modded class MissionServer
 		if (SSMConstants.TEST_MODE && SSMConstants.TEST_IGNORE_DARKNESS)
 			return true;
 
+		if (!g_Game)
+			return false;
+
 		World world = g_Game.GetWorld();
 
 		if (!world)
@@ -65,6 +68,14 @@ modded class MissionServer
 			return false;
 
 		if (world.GetSunOrMoon() < SSMConstants.DARKNESS_THRESHOLD)
+			return false;
+
+		Weather weather = g_Game.GetWeather();
+
+		if (!weather)
+			return false;
+
+		if (weather.GetOvercast().GetActual() > 0.50)
 			return false;
 
 		return true;
