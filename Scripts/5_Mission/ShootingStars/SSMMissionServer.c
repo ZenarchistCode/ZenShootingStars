@@ -75,7 +75,7 @@ modded class MissionServer
 		if (!weather)
 			return false;
 
-		if (weather.GetOvercast().GetActual() > 0.50)
+		if (weather.GetOvercast().GetActual() > 0.30)
 			return false;
 
 		return true;
