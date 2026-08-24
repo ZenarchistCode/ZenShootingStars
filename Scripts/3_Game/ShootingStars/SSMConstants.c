@@ -10,7 +10,7 @@ class SSMConstants
 	// Set true only if you want to test the effect during daytime.
 	static const bool TEST_IGNORE_DARKNESS = false;
 
-	static const int TEST_INTERVAL_MS = 2000;
+	static const int TEST_INTERVAL_MS = 1000;
 	static const int MIN_INTERVAL_MS = 120000;
 	static const int MAX_INTERVAL_MS = 300000;
 	static const int NIGHT_RECHECK_MS = 30000;

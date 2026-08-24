@@ -12,6 +12,11 @@ modded class MissionServer
 		if (m_SSM_SchedulerStarted)
 			return;
 
+		#ifdef ZenModPack
+		if (!ZenModEnabled("ZenShootingStars"))
+			return;
+		#endif
+
 		m_SSM_SchedulerStarted = true;
 		SSM_ScheduleNextCheck(SSMConstants.TEST_INTERVAL_MS);
 	}

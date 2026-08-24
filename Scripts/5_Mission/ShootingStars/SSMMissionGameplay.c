@@ -1,4 +1,3 @@
-#ifndef SERVER
 modded class MissionGameplay
 {
 	protected ref array<ref SSM_ShootingStarEffect> m_SSM_ActiveEffects;
@@ -114,4 +113,3 @@ modded class MissionGameplay
 		m_SSM_ActiveEffects.Clear();
 	}
 };
-#endif

@@ -1,4 +1,3 @@
-#ifndef SERVER
 class SSM_ShootingStarEffect
 {
 	protected ParticleSource m_SSM_Particle;
@@ -61,4 +60,3 @@ class SSM_ShootingStarEffect
 		return true;
 	}
 };
-#endif
