@@ -117,29 +117,13 @@ modded class MissionServer
 		else
 			SSM_GenerateRadiantMeteor(startYaw, startPitch, endYaw, endPitch);
 
-		array<Man> players = new array<Man>;
-		g_Game.GetPlayers(players);
-
-		foreach (Man man : players)
-		{
-			PlayerBase player = PlayerBase.Cast(man);
-
-			if (!player)
-				continue;
-
-			PlayerIdentity identity = player.GetIdentity();
-
-			if (!identity)
-				continue;
-
-			ScriptRPC rpc = new ScriptRPC();
-			rpc.Write(startYaw);
-			rpc.Write(startPitch);
-			rpc.Write(endYaw);
-			rpc.Write(endPitch);
-			rpc.Write(duration);
-			rpc.Send(null, SSMConstants.RPC_SHOOTING_STAR, true, identity);
-		}
+		ScriptRPC rpc = new ScriptRPC();
+		rpc.Write(startYaw);
+		rpc.Write(startPitch);
+		rpc.Write(endYaw);
+		rpc.Write(endPitch);
+		rpc.Write(duration);
+		rpc.Send(null, SSMConstants.RPC_SHOOTING_STAR, true, null);
 	}
 
 	protected void SSM_GenerateRandomMeteor(out float startYaw, out float startPitch, out float endYaw, out float endPitch)
@@ -245,5 +229,75 @@ modded class MissionServer
 			pitch = SSMConstants.MAX_END_PITCH;
 
 		return pitch;
+	}
+
+	bool SSM_ForceShootingStar()
+	{
+		SSM_BroadcastShootingStar();
+		Print("[ShootingStars] Shooting star manually triggered.");
+		return true;
+	}
+
+	bool SSM_ForceStarShower(int starCount = 8)
+	{
+		if (starCount < 3)
+			starCount = 3;
+
+		if (starCount > 20)
+			starCount = 20;
+
+		float oldRadiantYaw = m_SSM_RadiantYaw;
+		float oldRadiantPitch = m_SSM_RadiantPitch;
+
+		m_SSM_RadiantYaw = Math.RandomFloatInclusive(0.0, 360.0);
+		m_SSM_RadiantPitch = Math.RandomFloatInclusive(SSMConstants.NIGHTLY_RADIANT_MIN_PITCH, SSMConstants.NIGHTLY_RADIANT_MAX_PITCH);
+
+		float baseStartYaw;
+		float baseStartPitch;
+		float baseEndYaw;
+		float baseEndPitch;
+
+		SSM_GenerateRadiantMeteor(baseStartYaw, baseStartPitch, baseEndYaw, baseEndPitch);
+
+		m_SSM_RadiantYaw = oldRadiantYaw;
+		m_SSM_RadiantPitch = oldRadiantPitch;
+
+		int delayMs = 0;
+
+		for (int i = 0; i < starCount; i++)
+		{
+			delayMs = delayMs + Math.RandomIntInclusive(700, 2500);
+			g_Game.GetCallQueue(CALL_CATEGORY_SYSTEM).CallLater(SSM_ForceShowerStar, delayMs, false, baseStartYaw, baseStartPitch, baseEndYaw, baseEndPitch);
+		}
+
+		Print("[ShootingStars] Forced meteor shower scheduled with " + starCount + " stars.");
+
+		return true;
+	}
+
+	protected void SSM_ForceShowerStar(float baseStartYaw, float baseStartPitch, float baseEndYaw, float baseEndPitch)
+	{
+		float yawOffset = Math.RandomFloatInclusive(-3.0, 3.0);
+		float pitchOffset = Math.RandomFloatInclusive(-2.0, 2.0);
+
+		float startYaw = SSM_WrapYaw(baseStartYaw + yawOffset);
+		float startPitch = SSM_ClampStartPitch(baseStartPitch + pitchOffset);
+		float endYaw = SSM_WrapYaw(baseEndYaw + yawOffset);
+		float endPitch = SSM_ClampEndPitch(baseEndPitch + pitchOffset);
+
+		float duration = Math.RandomFloatInclusive(SSMConstants.MIN_DURATION, SSMConstants.MAX_DURATION);
+
+		SSM_SendForcedShootingStar(startYaw, startPitch, endYaw, endPitch, duration);
+	}
+
+	protected void SSM_SendForcedShootingStar(float startYaw, float startPitch, float endYaw, float endPitch, float duration)
+	{
+		ScriptRPC rpc = new ScriptRPC();
+		rpc.Write(startYaw);
+		rpc.Write(startPitch);
+		rpc.Write(endYaw);
+		rpc.Write(endPitch);
+		rpc.Write(duration);
+		rpc.Send(null, SSMConstants.RPC_SHOOTING_STAR, true, null);
 	}
 };

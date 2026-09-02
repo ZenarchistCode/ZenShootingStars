@@ -4,7 +4,7 @@ This lightweight mod adds shooting stars to the night sky.
 
 The effect is synced to all players so everyone can see the same thing.
 
-Shooting stars only happen when it's very dark and the night sky is clear, and the effect triggers randomly every ~2-5 minutes.
+Shooting stars only happen when it's very dark and the night sky is clear, and the effect triggers randomly every ~2-10 minutes.
 
 Someone bought me a coffee months ago and asked for this mod - I can't remember your name sorry, but thanks for the coffee and suggestion - finally got around to making it (with the help of ChatGPT).
 
